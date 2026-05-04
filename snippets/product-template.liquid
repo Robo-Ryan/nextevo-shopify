@@ -365,7 +365,7 @@
                       </div>
                     {% endif %}
                  {% when 'wholesale_contact' %}
-                   {% if customer.b2b? %}
+                   {% unless customer.b2b? %}
                    <div id="{{ block.id }}" class="product-block product-block--wholesale-contact">
                      <div class="wholesale-title">{{ block.settings.title }}</div>
                      {%- assign form_id = 'contact-' | append: section.id -%}
@@ -427,7 +427,7 @@
                      </div>
                      {%- endform -%}
                    </div>
-                   {% endif %}
+                   {% endunless %}
 
                 {%- endcase -%}
               {%- else -%}
