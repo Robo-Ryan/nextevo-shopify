@@ -2469,9 +2469,9 @@ label.variant__label:not(.variant__button-label):not(.text-label),
   border: 1px solid var(--colorTextBody);
 }
 .variant-input-wrap input[type=radio]:checked+label {
-  background: #f5f6fb;
+  background: var(--colorBtnPrimary);
   border: 1px solid var(--colorBtnPrimary);
-  color: var(--colorBtnPrimary);
+  color: #ffffff;
   font-weight: bold;
   box-shadow: none;
 }
