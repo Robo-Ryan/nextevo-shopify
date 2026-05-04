@@ -2545,3 +2545,14 @@ label.variant__label:not(.variant__button-label):not(.text-label),
     padding-right: 0;
   }
 }
+
+/* Variant button: sold-out / OOS state — grey text, no diagonal strikethrough */
+.variant__button-label.disabled {
+  color: #999999 !important;
+  background-color: #f4f4f4 !important;
+  border-color: #dddddd !important;
+  opacity: 1 !important;
+}
+.variant__button-label.disabled::after {
+  display: none !important;
+}
