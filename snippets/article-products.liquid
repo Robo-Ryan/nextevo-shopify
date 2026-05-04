@@ -1,0 +1,24 @@
+<div class="article-products">
+  <div class="grid">
+  {% for product in products.value %}
+    <div class="grid__item grid-product small--one-whole medium-up--one-third">
+      <div class="grid-product__content">
+        {%- liquid
+          assign preview_image = product.featured_media.preview_image
+          assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+        -%}
+
+        <a href="{{ product.url }}" class="grid-product__link">
+          <img src="{{ preview_image | img_url: '600x' }}" loading="lazy">
+          <div class="grid-product__meta">
+            <div class="grid-product__title grid-product__title--{{ settings.type_product_style }}">{{ product.title }}</div>
+          </div>
+        </a>
+        <a href="{{ product.url }}" class="grid-product__button btn btn--secondary">
+          Try Now
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+</div>

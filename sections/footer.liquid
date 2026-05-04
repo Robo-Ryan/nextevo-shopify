@@ -1,0 +1,521 @@
+{% unless template == 'collection.supplements-promotion'or template =='collection.promotion'or template =='collection.social' or template == 'collection.social-bf-2024' or template == 'collection.new-release' %}
+{%- liquid
+  assign show_selectors = false
+  assign currency_selector = false
+  assign locale_selector = false
+
+  if section.settings.show_currency_selector and shop.enabled_currencies.size > 1
+    assign currency_selector = true
+  endif
+
+  if section.settings.show_locale_selector and shop.enabled_locales.size > 1
+    assign locale_selector = true
+  endif
+
+  if currency_selector or locale_selector
+    assign show_selectors = true
+  endif
+-%}
+
+{%- assign hide_header_footer = false -%}
+{%- if template contains 'page' -%}
+  {%- if page.metafields.custom.hide_header_footer -%}
+    {%- assign hide_header_footer = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if settings.color_footer == settings.color_body_bg -%}
+  {%- style -%}
+    .site-footer {
+      border-top: 1px solid {{ settings.color_borders }};
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+<footer class="site-footer" data-section-id="{{ section.id }}" data-section-type="footer-section">
+  <div class="page-width">
+    {%- assign instafeed_block = section.blocks | where: 'type', 'instafeed' | first -%}
+    {%- unless hide_header_footer -%}
+    {%- if instafeed_block != blank -%}
+     <div class="footer-instagram">
+       {% if instafeed_block.settings.title != blank %}
+        <p class="h4 footer__title">{{ instafeed_block.settings.title }}</p>
+       {% endif %}
+       {% if instafeed_block.settings.text != blank %}
+        <p class="large-text">{{ instafeed_block.settings.text }}</p>
+       {% endif %}
+       <div class="insta-image">
+         <div class="insta-image--wrapper">
+           {% if instafeed_block.settings.image != blank %}
+               {%- assign img_url = instafeed_block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+               <img class="lazyload {% if instafeed_block.settings.mobile_image != blank %}insta-desktop{% endif %}"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720, 980, 1200, 1800]"
+                        data-aspectratio="{{ instafeed_block.settings.image.aspect_ratio }}"
+                        data-sizes="auto"
+                        alt="{{ instafeed_block.settings.image.alt | default: 'NextEvo Instagram' }}">
+                    <noscript>
+                      <img class="lazyloaded" src="{{ instafeed_block.settings.image | img_url: '400x' }}" alt="{{ instafeed_block.settings.image.alt | default: 'NextEvo Instagram' }}">
+                    </noscript>
+           {% endif %}
+           {% if instafeed_block.settings.mobile_image != blank %}
+             {%- assign img_url = instafeed_block.settings.mobile_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+               <img class="lazyload insta-mobile"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720]"
+                        data-aspectratio="{{ instafeed_block.settings.mobile_image.aspect_ratio }}"
+                        data-sizes="auto"
+                        alt="{{ instafeed_block.settings.mobile_image.alt | default: 'NextEvo Instagram' }}">
+                    <noscript>
+                      <img class="lazyloaded" src="{{ instafeed_block.settings.mobile_image | img_url: '400x' }}" alt="{{ instafeed_block.settings.mobile_image.alt | default: 'NextEvo Instagram' }}">
+                    </noscript>
+           {% endif %}
+           <a class="overlay" target="_blank" rel="noopener" href="{{ settings.social_instagram_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+             <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-instagram" viewBox="0 0 32 32"><path fill="#444" d="M16 3.094c4.206 0 4.7.019 6.363.094 1.538.069 2.369.325 2.925.544.738.287 1.262.625 1.813 1.175s.894 1.075 1.175 1.813c.212.556.475 1.387.544 2.925.075 1.662.094 2.156.094 6.363s-.019 4.7-.094 6.363c-.069 1.538-.325 2.369-.544 2.925-.288.738-.625 1.262-1.175 1.813s-1.075.894-1.813 1.175c-.556.212-1.387.475-2.925.544-1.663.075-2.156.094-6.363.094s-4.7-.019-6.363-.094c-1.537-.069-2.369-.325-2.925-.544-.737-.288-1.263-.625-1.813-1.175s-.894-1.075-1.175-1.813c-.212-.556-.475-1.387-.544-2.925-.075-1.663-.094-2.156-.094-6.363s.019-4.7.094-6.363c.069-1.537.325-2.369.544-2.925.287-.737.625-1.263 1.175-1.813s1.075-.894 1.813-1.175c.556-.212 1.388-.475 2.925-.544 1.662-.081 2.156-.094 6.363-.094zm0-2.838c-4.275 0-4.813.019-6.494.094-1.675.075-2.819.344-3.819.731-1.037.4-1.913.944-2.788 1.819S1.486 4.656 1.08 5.688c-.387 1-.656 2.144-.731 3.825-.075 1.675-.094 2.213-.094 6.488s.019 4.813.094 6.494c.075 1.675.344 2.819.731 3.825.4 1.038.944 1.913 1.819 2.788s1.756 1.413 2.788 1.819c1 .387 2.144.656 3.825.731s2.213.094 6.494.094 4.813-.019 6.494-.094c1.675-.075 2.819-.344 3.825-.731 1.038-.4 1.913-.944 2.788-1.819s1.413-1.756 1.819-2.788c.387-1 .656-2.144.731-3.825s.094-2.212.094-6.494-.019-4.813-.094-6.494c-.075-1.675-.344-2.819-.731-3.825-.4-1.038-.944-1.913-1.819-2.788s-1.756-1.413-2.788-1.819c-1-.387-2.144-.656-3.825-.731C20.812.275 20.275.256 16 .256z"/><path fill="#444" d="M16 7.912a8.088 8.088 0 0 0 0 16.175c4.463 0 8.087-3.625 8.087-8.088s-3.625-8.088-8.088-8.088zm0 13.338a5.25 5.25 0 1 1 0-10.5 5.25 5.25 0 1 1 0 10.5zM26.294 7.594a1.887 1.887 0 1 1-3.774.002 1.887 1.887 0 0 1 3.774-.003z"/></svg>
+           </a>
+         </div>
+       </div>
+     </div>
+    {%- endif -%}
+    {%- endunless -%}
+    {%- unless hide_header_footer -%}
+    <div class="grid footer-inner">
+      
+      <div class="footer-column-left">
+        {% assign newsletter_block = section.blocks | where: "type", "newsletter" | first %}
+        <div {{ newsletter_block.shopify_attributes }} class="grid__item footer__item--{{ newsletter_block.id }} footer__item--{{ newsletter_block.type }}" data-type="{{ newsletter_block.type }}">
+          {% render 'footer-newsletter', block: newsletter_block %}
+        </div>
+      </div>
+      
+      <div class="footer-column-right">
+        <div class="icons-row">
+          {% assign icons_block = section.blocks | where: "type", "icons" | first %}
+          <div {{ icons_block.shopify_attributes }} class="grid__item footer__item--{{ icons_block.id }} footer__item--{{ icons_block.type }}" data-type="{{ icons_block.type }}">
+          {% render 'footer-icons', block: icons_block %}
+          </div>
+        </div>
+        <div class="menu-row">
+          {%- for block in section.blocks -%}
+            {% if block.type == 'menu' %}
+              <div {{ block.shopify_attributes }} class="grid__item footer__item--{{ block.id }} footer__item--{{ block.type }}" data-type="{{ block.type }}">
+                {% render 'footer-menu', block: block %}
+              </div>
+            {% endif %}
+          {%- endfor -%}
+        </div>
+      </div>
+      
+     {% comment %} 
+      {%- assign row_width = 0 -%}
+      {%- for block in section.blocks -%}
+       {% unless block.type == 'instafeed' %}
+        {%- assign row_width = row_width | plus: block.settings.container_width -%}
+        {%- if row_width > 100 -%}
+          <div class="footer__clear small--hide"></div>
+          {%- assign row_width = row_width | minus: 100 -%}
+        {%- endif -%}
+        
+      
+        <div {{ block.shopify_attributes }} class="grid__item footer__item--{{ block.id }} footer__item--{{ block.type }}" data-type="{{ block.type }}">
+          {%- style -%}
+            @media only screen and (min-width: 769px) and (max-width: 959px) {
+              .footer__item--{{ block.id }} {
+                width: 50%;
+                padding-top: 40px;
+              }
+              .footer__item--{{ block.id }}:nth-child(2n + 1) {
+                clear: left;
+              }
+            }
+            @media only screen and (min-width: 960px) {
+              .footer__item--{{ block.id }} {
+                width: {{ block.settings.container_width }}%;
+              }
+
+            }
+          {%- endstyle -%}
+
+          {%- liquid
+            case block.type
+              when 'logo_social'
+                render 'footer-logo', block: block
+              when 'custom'
+                render 'footer-custom-text', block: block
+              when 'newsletter'
+                render 'footer-newsletter', block: block
+              when 'menu'
+                render 'footer-menu', block: block
+            endcase
+          -%}
+        </div>
+       {% endunless %}
+      {%- endfor -%}
+      {% endcomment %} 
+      
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'logo' -%}
+          <div class="grid__item medium-up--hide">
+            {%- render 'footer-logo', block: block -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- endunless -%}
+
+    {%- if show_selectors -%}
+      <div class="footer__section">
+        {%- render 'multi-selectors',
+          locale_selector: locale_selector,
+          currency_selector: currency_selector,
+          show_currency_flags: section.settings.show_currency_flags
+          location: 'footer'
+        -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_payment_icons -%}
+      {%- unless shop.enabled_payment_types == empty -%}
+        <ul class="inline-list payment-icons footer__section">
+          {%- for type in shop.enabled_payment_types -%}
+            <li class="icon--payment">
+              {{ type | payment_type_svg_tag }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endunless -%}
+    {%- endif -%}
+
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+      {%- if section.settings.bottom_menu != blank -%}
+      <ul class="no-bullets site-footer__linklist">
+        {%- for link in linklists[section.settings.bottom_menu].links -%}
+          <li><a class="footer__small-text" href="{{ link.url }}">{{ link.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+      {%- endif -%}
+      {%- if section.settings.show_copyright -%}
+        <p class="footer__small-text small--hide">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+        </p>
+      {%- endif -%}
+      {% comment %}
+      <p class="footer__small-text">{{ powered_by_link }}</p>
+      {% endcomment %}
+      </div>
+      <div class="footer-disclaimers">
+        {%- if section.settings.copyright_text != blank -%}
+          <div class="footer__small-text boxed-text">
+              {{ section.settings.copyright_text }}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.footer_text != blank -%}
+          <div class="footer__small-text">
+              {{ section.settings.footer_text }}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.show_copyright -%}
+        <p class="footer__small-text medium-up--hide">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+        </p>
+      {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</footer>
+{% endunless %}               
+
+{% schema %}
+  {
+    "name": "Footer",
+    "max_blocks": 12,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Language selector",
+        "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_locale_selector",
+        "label": "Show language selector",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Currency selector",
+        "info": "To add a currency, go to your [currency settings.](/admin/settings/payments)"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_currency_selector",
+        "label": "Show currency selector",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_currency_flags",
+        "label": "Show currency flags",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Additional footer content"
+      },
+      {
+        "type": "link_list",
+        "id": "bottom_menu",
+        "label": "Choose a menu",
+        "info": "This menu won't show dropdown items"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "Show payment icons",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_copyright",
+        "label": "Show copyright"
+      },
+      {
+        "type": "text",
+        "id": "copyright_text",
+        "label": "Disclaimer text"
+      },
+      {
+        "type": "text",
+        "id": "footer_text",
+        "label": "Additional footer text"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_social",
+        "name": "Logo",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo image"
+          },
+          {
+            "type": "range",
+            "id": "desktop_logo_height",
+            "label": "Logo height",
+            "default": 50,
+            "min": 20,
+            "max": 120,
+            "unit": "px"
+          },
+          {
+            "type": "range",
+            "id": "container_width",
+            "label": "Column width",
+            "default": 25,
+            "min": 15,
+            "max": 95,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "type": "menu",
+        "name": "Navigation",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_footer_title",
+            "label": "Show heading"
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Choose a menu",
+            "default": "footer",
+            "info": "This menu won't show dropdown items"
+          },
+          {
+            "type": "range",
+            "id": "container_width",
+            "label": "Column width",
+            "default": 25,
+            "min": 15,
+            "max": 95,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "type": "newsletter",
+        "name": "Newsletter and social",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo image"
+          },
+          {
+            "type": "range",
+            "id": "desktop_logo_height",
+            "label": "Logo height",
+            "default": 50,
+            "min": 20,
+            "max": 120,
+            "unit": "px"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_footer_title",
+            "label": "Show heading",
+            "default": true
+          },
+          {
+            "type": "paragraph",
+            "content": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers)."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Sign up and save"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "info": "Optional",
+            "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+          },
+          {
+            "type": "range",
+            "id": "container_width",
+            "label": "Column width",
+            "default": 25,
+            "min": 15,
+            "max": 95,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "type": "custom",
+        "name": "Custom text",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_footer_title",
+            "label": "Show heading",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Custom text"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Add your own custom text here.</p>"
+          },
+          {
+            "type": "range",
+            "id": "container_width",
+            "label": "Column width",
+            "default": 25,
+            "min": 15,
+            "max": 95,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "type": "icons",
+        "name": "Icons",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "icon_1",
+            "label": "Icon #1"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_2",
+            "label": "Icon #2"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_3",
+            "label": "Icon #3"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_4",
+            "label": "Icon #4"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_5",
+            "label": "Icon #5"
+          }
+        ]
+      },
+      {
+        "type": "instafeed",
+        "name": "Instagram",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Follow Us"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text",
+            "default": "#NextEvo"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "mobile_image",
+            "label": "Mobile image",
+            "info": "If none selected, desktop image will show"
+          }
+        ]
+      }
+    ],
+    "default": {
+      "settings": {},
+      "blocks": [
+        {
+          "type": "menu",
+          "settings": {}
+        },
+        {
+          "type": "logo_social",
+          "settings": {}
+        }
+      ]
+    }
+  }
+{% endschema %}
+
+            

@@ -1,0 +1,221 @@
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+-%}
+
+{% capture slideshow_config %}{
+    "accessibility": true,
+    "wrapAround": true,
+    "prevNextButtons": false,
+    "pageDots": false,
+    "autoPlay": true
+
+    }
+{% endcapture %}
+
+<div class="marquee__section">
+  <section class="marquee__section-{{ section.id }}" data-section-id="{{ section.id }}">
+     <div class="marquee">
+       <div class="track">
+       {% assign text_blocks = 0 %}
+      {% for block in section.blocks %}
+       {% if block.type == 'marquee_text' %}
+        {% assign text_blocks = text_blocks | plus: 1 %}
+       {% endif %}
+        <div class="marquee-item" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | img_url: '200x' }}">
+            {% endif %}
+            {% if block.settings.title_text != blank %}
+             <span>{{ block.settings.title_text }}</span>
+            {% endif %}
+         </div>
+         <div class="marquee-item divider">
+           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" zoomAndPan="magnify" viewBox="0 0 37.5 37.499999" height="50" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="id1"><path d="M 0 0 L 37.007812 0 L 37.007812 37.007812 L 0 37.007812 Z M 0 0 " clip-rule="nonzero"/></clipPath></defs><g clip-path="url(#id1)"><path fill="#ffffff" d="M 0 0 L 37.5 0 L 37.5 45 L 0 45 Z M 0 0 " fill-opacity="1" fill-rule="nonzero"/><path fill="#ffffff" d="M 0 0 L 37.5 0 L 37.5 37.5 L 0 37.5 Z M 0 0 " fill-opacity="1" fill-rule="nonzero"/><path fill="#ffffff" d="M 0 0 L 37.5 0 L 37.5 37.5 L 0 37.5 Z M 0 0 " fill-opacity="1" fill-rule="nonzero"/><path fill="#002d72" d="M 18.75 0 C 8.394531 0 0 8.394531 0 18.75 C 0 29.105469 8.394531 37.5 18.75 37.5 C 29.105469 37.5 37.5 29.105469 37.5 18.75 C 37.5 8.394531 29.105469 0 18.75 0 " fill-opacity="1" fill-rule="nonzero"/></g></svg>
+         </div>
+      {% endfor %}
+      {% for block in section.blocks %}
+       {% if block.type == 'marquee_text' %}
+        {% assign text_blocks = text_blocks | plus: 1 %}
+       {% endif %}
+        <div class="marquee-item" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | img_url: '200x' }}">
+            {% endif %}
+            {% if block.settings.title_text != blank %}
+             <span>{{ block.settings.title_text }}</span>
+            {% endif %}
+         </div>
+         <div class="marquee-item divider">
+           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" zoomAndPan="magnify" viewBox="0 0 37.5 37.499999" height="50" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="id1"><path d="M 0 0 L 37.007812 0 L 37.007812 37.007812 L 0 37.007812 Z M 0 0 " clip-rule="nonzero"/></clipPath></defs><g clip-path="url(#id1)"><path fill="#ffffff" d="M 0 0 L 37.5 0 L 37.5 45 L 0 45 Z M 0 0 " fill-opacity="1" fill-rule="nonzero"/><path fill="#ffffff" d="M 0 0 L 37.5 0 L 37.5 37.5 L 0 37.5 Z M 0 0 " fill-opacity="1" fill-rule="nonzero"/><path fill="#ffffff" d="M 0 0 L 37.5 0 L 37.5 37.5 L 0 37.5 Z M 0 0 " fill-opacity="1" fill-rule="nonzero"/><path fill="#002d72" d="M 18.75 0 C 8.394531 0 0 8.394531 0 18.75 C 0 29.105469 8.394531 37.5 18.75 37.5 C 29.105469 37.5 37.5 29.105469 37.5 18.75 C 37.5 8.394531 29.105469 0 18.75 0 " fill-opacity="1" fill-rule="nonzero"/></g></svg>
+         </div>
+      {% endfor %}
+       </div>
+    </div>
+
+  </section>
+  <div class="clear"></div>
+</div>
+
+<style>
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  
+  .marquee__section {
+    background: {{ section.settings.background }};
+  }
+  .marquee {
+    width: 100%;
+    height: 82px;
+    border-top: 2px solid {{ section.settings.color }};
+    border-bottom: 2px solid {{ section.settings.color }};
+    position: relative;
+    overflow: hidden;
+  }
+  .marquee .track {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    will-change: transform;
+    animation: marquee 28s linear infinite;
+  }
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    margin: 0 10px;
+    width: 185px;
+    white-space: nowrap;
+    color: {{ section.settings.color }};
+  }
+  .marquee-item.divider {
+    width: 20px;
+    text-align: center;
+  }
+  .marquee-item.divider svg {
+    width: 9px;
+    height: 9px;
+  }
+  .marquee-item img {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+  }
+  .marquee-item span {
+    text-transform: uppercase;
+    margin-bottom: 0;
+    color: {{ section.settings.color }};
+    font-weight: 600;
+  }
+  @media screen and (max-width: 980px) {
+    .marquee-item {
+      margin: 0 10px;
+      height: 64px;
+    }
+    .marquee-item img,
+    .marquee-carousel {
+      height: 64px;
+    }
+    .marquee-item.divider {
+      line-height: 24px;
+    }
+  }
+</style>
+
+
+
+{% schema %}
+{
+  "name": "Scrolling marquee",
+  "settings":
+  [
+   {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#F8F8F8"
+   },
+   {
+      "type": "color",
+      "id": "color",
+      "label": "Text",
+      "default": "#8a8989"
+   }
+  ],
+  "blocks":
+  [
+    {
+      "type": "marquee_image",
+      "name": "Image",
+      "settings":
+      [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Use image with a 3:2 aspect ratio, e.g. 900px x 600px"
+        }
+      ]
+    },
+    {
+      "type": "marquee_text",
+      "name": "Text",
+      "settings":
+      [
+        {
+          "type": "text",
+          "id": "title_text",
+          "label": "Heading",
+          "default": "Heading"
+        }
+      ]
+    }
+  ],
+  "presets":
+  [
+    {
+      "name": "Scrolling marquee",
+      "blocks":
+      [
+        {
+          "type": "marquee_text"
+        },
+        {
+          "type": "marquee_text"
+        },
+        {
+          "type": "marquee_text"
+        }
+      ]
+    }
+  ],
+  "templates":
+  [
+    "404",
+    "article",
+    "blog",
+    "cart",
+    "collection",
+    "list-collections",
+    "index",
+    "page",
+    "product",
+    "search"
+  ]
+}
+{% endschema %}

@@ -1,0 +1,56 @@
+{% if article.content contains '<h2>' %}
+{% assign nav_heads = '' %}
+{% assign nav_subheads = '' %}
+
+{% assign chunks = article.content | strip | split: "<h2>" %}
+{% for c in chunks %}
+ {% if c contains '</h2>' %}
+  {% assign chunk = c | split: "</h2>" %}
+  {% assign nav_heads = nav_heads | append: chunk.first | append: ',' %}
+  {% if chunk.last contains '<h3>' %}
+   {% assign sub_chunks = chunk.last | split: '<h3>' %}
+    {% for sub_c in sub_chunks %}
+     {% if sub_c contains '</h3>' %}
+      {% assign sub_chunk = sub_c | split: "</h3>" %}
+      {% assign nav_subheads = nav_subheads | append: sub_chunk | append: ',' %}
+     {% endif %}
+    {% endfor %}
+   {% endif %}
+ {% endif %}
+{% endfor %}
+
+{% assign nav_heads = nav_heads | split: "," %}
+{% assign nav_subheads = nav_subheads | split: "," %}
+
+<div class="article__nav">
+  <h3>In This Article</h3>
+  {% assign chunks = article.content | strip | split: "<h2>" %}
+  {% for c in chunks %}
+   {% if c contains '</h2>' %}
+    {% assign chunk = c | split: "</h2>" %}
+    {% assign heading = chunk.first %}
+    <div class="article-nav--heading">{{ heading }}</div>
+    {% if chunk.last contains '<h3>' %}
+     <ul>
+     {% assign sub_chunks = chunk.last | split: '<h3>' %}
+      {% for sub_c in sub_chunks %}
+       {% if sub_c contains '</h3>' %}
+        {% assign subheading = sub_c | split: '</h3>' | first %}
+        <li class="article-nav--subheading">{{ subheading }}</li>
+       {% endif %}
+      {% endfor %}
+     </ul>
+     {% endif %}
+   {% endif %}
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+<script>
+  $( ".article-nav--subheading" ).click(function() {
+    var heading = $(this).html();
+    console.log(heading);
+    $(window).scrollTop($("*:contains(heading):last").offset().top);
+  });
+</script> -->

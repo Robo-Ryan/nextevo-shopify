@@ -1,0 +1,26 @@
+<div class="article-upsell">
+  <a class="article-upsell-link" href="{{ promo_link }}"></a>
+  <div class="article-upsell-wrapper">
+    <div class="article-upsell__image">
+      <img src="{{ promo_image | img_url: '800x' }}">
+    </div>
+    <div class="article-upsell__content">
+      {% if promo_title != blank %}
+        <h3>{{ promo_title }}</h3>
+      {% endif %}
+      {% if promo_text != blank %}
+      <div class="col-wrapper">
+        <div class="col-1">
+          {{ promo_text }}
+        </div>
+        <div class="col-2">
+          <a class="btn btn--upsell" href="{{ promo_link }}">Try Now</a>
+          <img src="https://cdn.shopify.com/s/files/1/0571/6977/2717/files/cbd-usps_1600x.png?v=1650561486">
+        </div>
+      </div>
+      {% elsif promo_link != blank %}
+        <a class="btn btn--upsell" href="{{ promo_link }}">Try Now</a>
+      {% endif %}
+    </div>
+  </div>
+</div>

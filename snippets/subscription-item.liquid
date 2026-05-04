@@ -1,0 +1,88 @@
+<div class="subscription-product" data-product-id="{{ item.id }}">
+
+  {% assign delivery = '' %}
+  {% if subscription_interval contains '1' %}
+    {% assign delivery = 'products.subscription.1_month_supply' | t %}
+    {% assign delivery_message = 'products.subscription.1_month_message' | t | downcase %}
+    {% assign delivery = delivery | append: ' ' | append:  delivery_message %}
+  {% elsif subscription_interval contains '3' %}
+    {% assign delivery = 'products.subscription.3_month_supply' | t %}
+    {% assign delivery_message = 'products.subscription.3_month_message' | t | downcase %}
+    {% assign delivery = delivery | append: ' ' | append:  delivery_message %}
+  {% elsif subscription_interval contains '6' %} 
+    {% assign delivery = 'products.subscription.6_month_supply' | t %}
+    {% assign delivery_message = 'products.subscription.6_month_message' | t | downcase %}
+    {% assign delivery = delivery | append: ' ' | append:  delivery_message %}
+  {% else %}
+    {% assign delivery = subscription_interval %}
+  {% endif %}
+  
+  <input type="radio" class="subscription-input" id="subscription-{{ plan.id }}" name="subscription-{{ product.id }}" value="{{ item_variant.id }}" data-plan="{{ plan.id }}" data-delivery="{{ delivery }}" {% if subscription_interval contains '3' %}checked{% endif %}>
+  <label for="subscription-{{ plan.id }}" class="subscription-item">
+    <div class="subscription-info">
+      <div class="subscription-title">
+        {% if subscription_interval contains '1' %}
+          {{ 'products.subscription.1_month_supply' | t }}
+        {% elsif subscription_interval contains '3' %}
+          {{ 'products.subscription.3_month_supply' | t }}
+        {% elsif subscription_interval contains '6' %}
+          {{ 'products.subscription.6_month_supply' | t }}
+        {% else %}
+          {{ subscription_interval }}
+        {% endif %}
+      </div>
+      {% if subscription_interval contains '3' or subscription_interval contains '6' %}
+        <div class="subscription-badge">
+          {% if subscription_interval contains '3' %}
+            {{ 'products.subscription.3_month_badge' | t }}
+          {% elsif subscription_interval contains '6' %}
+            {{ 'products.subscription.6_month_badge' | t }}
+          {% endif %}
+        </div>
+      {% endif %}
+      <div class="subscription-message">
+        {% if subscription_interval contains '1' %}
+          {% assign ig_price_multiplier = "0.8" %}
+          {{ 'products.subscription.1_month_message' | t }}
+        {% elsif subscription_interval contains '3' %}
+          {% assign ig_price_multiplier = "0.33333" %}
+          {{ 'products.subscription.3_month_message' | t }}
+        {% elsif subscription_interval contains '6' %}
+          {{ 'products.subscription.6_month_message' | t }}
+          {% assign ig_price_multiplier = "0.166667" %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="subscription-pricing" data-product-id="{{ item.id }}">
+      {% assign downcase_interval = subscription_interval | downcase %}
+      {% assign months = downcase_interval | split: '-month' | first %}
+      {% assign months = months | append: '.00' %}
+      <div class="monthly-price">
+        {% assign discounted_amount = item.price | times: subscription_discount | divided_by: 100.00 %}
+        {% if has_subscription %}
+          <span class="original" data-price-multiplier="{{ ig_price_multiplier }}">{{ one_time_product.price | money }}</span>
+          {% if subscription_interval contains '1' %}
+            {% assign item_price = item.price | minus: discounted_amount %}
+            <strong data-price-multiplier="{{ ig_price_multiplier }}">{{ item_price | divided_by: months | money }}/month</strong>
+          {% else %}
+            <strong data-price-multiplier="{{ ig_price_multiplier }}">{{ item.price | divided_by: months | money }}/month</strong>
+          {% endif %}
+        {% else %}
+          {% if item.compare_at_price > item.price %}
+            <span class="original">{{ item.compare_at_price | money }}</span>
+            <strong>{{ item.price | money }}</strong>
+          {% else %}
+           <strong>{{ item.price | money }}</strong>
+          {% endif %}
+        {% endif %}
+      </div>
+      {% if subscription_discount != blank %}
+         <span class="discount-badge">Save {{ subscription_discount }}%</span>
+      {% elsif item.compare_at_price > item.price %}
+        {% assign one_time_discount = item.compare_at_price | minus: item.price  %}
+        {% assign one_time_discount = one_time_discount | times: 100.0 | divided_by: item.compare_at_price | round %}
+        <span class="discount-badge">Save {{ one_time_discount }}%</span>
+      {% endif %}
+    </div>
+  </label>
+</div>

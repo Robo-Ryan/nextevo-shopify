@@ -1,0 +1,180 @@
+<div class="iwt-columns featured-promos" id="iwt-columns--{{ section.id }}">
+{%- if section.settings.divider -%}<div class="section--divider">{%- endif -%}
+
+<div class="page-width">
+
+  <div class="grid grid--uniform grid--flush-bottom">
+    {%- liquid
+      assign grid_item_width = 'medium-up--one-third'
+      case section.blocks.size
+        when 1
+          assign grid_item_width = 'medium-up--one-half'
+        when 2
+          assign grid_item_width = 'medium-up--one-half'
+        when 3
+          assign grid_item_width = 'medium-up--one-third'
+        when 4
+          assign grid_item_width = 'medium-up--one-quarter'
+      endcase
+    -%}
+  
+    {%- for block in section.blocks -%}
+      <div class="grid__item promo {{ grid_item_width }} text-center" {{ block.shopify_attributes }} data-aos="row-of-3">
+        {%- if block.settings.title != blank -%}
+          <h3>{{ block.settings.title }}</h3>
+        {%- endif -%}
+        {%- if block.settings.text != blank -%}
+          <div class="rte-setting text-spacing">{{ block.settings.text }}</div>
+        {%- endif -%}
+        {%- if block.settings.button_label != blank -%}
+          <a href="{{ block.settings.button_link }}" class="text-btn">
+            {{ block.settings.button_label }}
+            <svg width="34" height="13" viewBox="0 0 34 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25.592 12.2C26.584 10.152 27.512 8.61602 28.376 7.59202H0.391968V5.57602H28.376C27.512 4.55202 26.584 3.01602 25.592 0.968018H27.272C29.288 3.30402 31.4 5.03202 33.608 6.15202V7.01602C31.4 8.10402 29.288 9.83202 27.272 12.2H25.592Z" fill="#002d72"></path>
+              </svg>
+          </a>
+        {%- endif -%}
+        {%- if block.settings.button_link != blank -%}
+         <a href="{{ block.settings.button_link }}" class="full-link"></a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  
+  
+</div>
+
+{%- if section.settings.divider -%}</div>{%- endif -%}
+</div>
+  
+<style>
+  #iwt-columns--{{ section.id }} .promo {
+    background: {{ section.settings.background }};
+  }
+  #iwt-columns--{{ section.id }} .promo,
+  #iwt-columns--{{ section.id }} .promo h3,
+  #iwt-columns--{{ section.id }} .promo h2{
+    color: {{ section.settings.text_color }};
+  }
+  #iwt-columns--{{ section.id }} .promo .text-btn {
+    color: {{ section.settings.text_color }};
+    border-color: {{ section.settings.text_color }};
+  }
+  
+  #shopify-section-{{ section.id }} {
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+  @media only screen and (max-width: 768px) {
+    #shopify-section-{{ section.id }} {
+      margin-top: {{ section.settings.margin_top | times: 0.6 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | times: 0.6 }}px;
+    }
+  }
+</style>
+
+
+{% schema %}
+  {
+    "name": "Featured promotions",
+    "settings": [
+      {
+        "type": "select",
+        "id": "align_text",
+        "label": "Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Centered"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "background",
+        "label": "Background",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      },
+      {
+        "type": "range",
+        "id": "margin_top",
+        "label": "Margin top",
+        "default": 0,
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "margin_bottom",
+        "label": "Margin bottom",
+        "default": 0,
+        "min": 0,
+        "max": 150,
+        "step": 5,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Column",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Example title"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text"
+          },
+          {
+            "type": "text",
+            "id": "button_label",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured promotions",
+        "blocks": [
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

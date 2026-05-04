@@ -1,0 +1,40 @@
+<div class="subscription-grid-product">
+
+  {% assign delivery = '' %}
+  {% if subscription_interval contains '1' %}
+    {% assign delivery = 'products.subscription.1_month_supply' | t %}
+    {% assign delivery_message = 'products.subscription.1_month_message' | t | downcase %}
+    {% assign delivery = delivery | append: ' ' | append:  delivery_message %}
+    {% assign subscription_title = 'Subscribe' %}
+  {% elsif subscription_interval contains '3' %}
+    {% assign delivery = 'products.subscription.3_month_supply' | t %}
+    {% assign delivery_message = 'products.subscription.3_month_message' | t | downcase %}
+    {% assign delivery = delivery | append: ' ' | append:  delivery_message %}
+    {% assign subscription_title = '3-Month Supply' %}
+  {% elsif subscription_interval contains '6' %} 
+    {% assign delivery = 'products.subscription.6_month_supply' | t %}
+    {% assign delivery_message = 'products.subscription.6_month_message' | t | downcase %}
+    {% assign delivery = delivery | append: ' ' | append:  delivery_message %}
+    {% assign subscription_title = '6-Month Supply' %}
+  {% else %}
+    {% assign delivery = subscription_interval %}
+    {% assign subscription_title = subscription_interval %}
+  {% endif %}
+  
+  <input type="radio" class="subscription-input" id="subscription-{{ plan.id }}" name="subscription-grid--{{ product.id }}" value="{{ item_variant.id }}" data-plan="{{ plan.id }}" data-delivery="{{ delivery }}" {% unless subscription_interval contains 'One-Time' %}checked{% endunless %}>
+  <label for="subscription-{{ plan.id }}" class="subscription-item">
+    <div class="subscription-info">
+      {% if price %}
+        <div class="subscription-price">
+        <span class="igPrice" {% if subscription_interval contains '3' %} data-price-multiplier="0.70" {% endif %}> {{ price | money }} </span>
+        </div>
+      {% endif %}
+      <div class="subscription-title">
+        {{ subscription_title }}
+      </div>
+      {% if subscription_discount != blank %}
+         <span class="discount-badge">Save {{ subscription_discount }}%</span>
+      {% endif %}
+    </div>
+  </label>
+</div>

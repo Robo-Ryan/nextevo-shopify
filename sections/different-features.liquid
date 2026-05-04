@@ -1,0 +1,304 @@
+{%- style -%}
+  .image-carousel--{{ section.id }},
+  .image-carousel--{{ section.id }} .testimonials-slider__text{
+    background-color: {{ section.settings.color_background }};
+    color: {{ section.settings.color_text }};
+  }
+  .image-carousel--{{ section.id }} .subheading,
+.image-carousel--{{ section.id }} h2 {
+    color: {{ section.settings.heading_color }};
+  }
+  .image-carousel--{{ section.id }} .rte {
+    color: {{ section.settings.text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  class="image-carousel different-features custom-testimonials image-carousel--{{ section.id }}{% if section.settings.color_background == settings.color_body_bg %} testimonials-section--with-divider{% endif %} text-{{ section.settings.align_text }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="custom-testimonials"
+  data-aos>
+  
+  <div class="desktop">
+    {%- if section.blocks.size > 0 -%}
+    <div class="slideshow-wrapper">
+      <div class="testimonials-content features-content small--hide">
+         {%- for block in section.blocks -%}
+          <blockquote class="testimonials-slider__text slider-text" id="slide-{{ forloop.index }}" {% unless forloop.first %}style="display: none;"{% endunless %}>
+              {%- if section.settings.title != blank -%}
+                  <div class="section-header">
+                    <h2 >{{ section.settings.title | escape }}</h2>
+                  </div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <div class="subheading">{{ block.settings.title | escape }}</div>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte-setting text-spacing">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </blockquote>
+         {%- endfor -%}
+      </div>
+      <div
+        class="features-images"
+        id="Testimonials-{{ section.id }}"
+        data-dots="true"
+        data-count="{{ section.blocks.size }}">
+        {%- for block in section.blocks -%}
+          <div
+            class="testimonials-slide image-carousel--slide testimonials-slide--{{ block.id }}"
+            data-index="{{ forloop.index0 }}"
+            data-aos="row-of-{{ section.blocks.size }}"
+            data-slide="slide-{{ forloop.index }}"
+            {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+                <div class="testimonail-image{% if section.settings.round_images %} testimonail-image--round{% endif %}">
+                  <div class="image-wrap text-spacing" style="height: 0; padding-bottom: {{ 100 | divided_by: block.settings.image.aspect_ratio }}%;">
+                    {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                    <img class="lazyload"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720]"
+                        data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                        data-sizes="auto"
+                        alt="{{ block.settings.image.alt }}">
+                    <noscript>
+                      <img class="lazyloaded" src="{{ block.settings.image | img_url: '400x' }}" alt="{{ block.settings.image.alt }}">
+                    </noscript>
+                  </div>
+                </div>
+              {%- endif -%}
+            <blockquote class="testimonials-slider__text medium-up--hide">
+              {%- if section.settings.title != blank -%}
+                  <div class="section-header">
+                    <h2>{{ section.settings.title | escape }}</h2>
+                  </div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <div class="subheading">{{ block.settings.title | escape }}</div>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte-setting text-spacing">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </blockquote>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+  </div>
+  <div class="mobile">
+  {%- if section.blocks.size > 0 -%}
+    <div class="slideshow-wrapper">
+      <div class="testimonials-content small--hide">
+         {%- for block in section.blocks -%}
+          <blockquote class="testimonials-slider__text slider-text" id="slide-{{ forloop.index }}" {% unless forloop.first %}style="display: none;"{% endunless %}>
+              {%- if section.settings.title != blank -%}
+                  <div class="section-header">
+                    <h2 >{{ section.settings.title | escape }}</h2>
+                  </div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <div class="subheading">{{ block.settings.title | escape }}</div>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte-setting text-spacing">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </blockquote>
+         {%- endfor -%}
+      </div>
+      <div
+        class="image-carousel--slider"
+        id="Testimonials-{{ section.id }}"
+        data-dots="true"
+        data-count="{{ section.blocks.size }}">
+        {%- for block in section.blocks -%}
+          <div
+            class="testimonials-slide image-carousel--slide testimonials-slide--{{ block.id }}"
+            data-index="{{ forloop.index0 }}"
+            data-aos="row-of-{{ section.blocks.size }}"
+            data-slide="slide-{{ forloop.index }}"
+            {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+                <div class="testimonail-image{% if section.settings.round_images %} testimonail-image--round{% endif %}">
+                  <div class="image-wrap text-spacing" style="height: 0; padding-bottom: {{ 100 | divided_by: block.settings.image.aspect_ratio }}%;">
+                    {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                    <img class="lazyload"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540, 720]"
+                        data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                        data-sizes="auto"
+                        alt="{{ block.settings.image.alt }}">
+                    <noscript>
+                      <img class="lazyloaded" src="{{ block.settings.image | img_url: '400x' }}" alt="{{ block.settings.image.alt }}">
+                    </noscript>
+                  </div>
+                </div>
+              {%- endif -%}
+            <blockquote class="testimonials-slider__text medium-up--hide">
+              {%- if section.settings.title != blank -%}
+                  <div class="section-header">
+                    <h2>{{ section.settings.title | escape }}</h2>
+                  </div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <div class="subheading">{{ block.settings.title | escape }}</div>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte-setting text-spacing">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </blockquote>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .image-carousel .testimonail-image--round
+</style>
+
+<script>
+window.onload = function() {  
+  var flkty = new Flickity( '.image-carousel--slider', {
+  adaptiveHeight: true,
+  cellAlign: 'left',
+  pageDots: true,
+  prevNextButtons: true,
+  wrapAround: false
+});
+  flkty.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+  if ( typeof cellIndex == 'number' ) {
+    flkty.selectCell( cellIndex );
+  }
+});
+
+  function displayQuote() {
+    var quotes = document.querySelectorAll(".slider-text");
+    for (var i = 0; i < quotes.length; ++ i) {
+        quotes[i].style.display = "none";
+    }
+    var slides = document.querySelectorAll(".image-carousel--slide");
+    for (var i = 0; i < slides.length; ++i) {
+      if (slides[i].classList.contains('is-selected')) {
+        var selectedQuote = slides[i].getAttribute('data-slide');
+        console.log(selectedQuote);
+        document.querySelector('#' + selectedQuote).style.display = "block";
+      }
+    }
+  }
+  displayQuote();
+  flkty.on( 'change', function( index ) {
+    console.log('flickity changed');
+    displayQuote();
+  });
+}
+</script>
+
+{% schema %}
+  {
+    "name": "Difference features",
+    "max_blocks": 9,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Heading"
+      },
+      {
+        "type": "select",
+        "id": "align_text",
+        "label": "Text alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Centered"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "round_images",
+        "label": "Circular images",
+        "info": "Requires square images",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#f9f9f9"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading color",
+        "default": "#4A9A9F"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text",
+        "default": "#002D72"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Image text",
+        "default": "#1c1d1d"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Image Heading"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Add text here to talk about your brand.</p>"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Difference features",
+        "blocks": [
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          },
+          {
+            "type": "image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,319 @@
+<div class="iwt-columns" id="iwt-columns--{{ section.id }}">
+{%- if section.settings.divider -%}<div class="section--divider">{%- endif -%}
+
+<div class="page-width">
+  {%- if section.settings.title != blank -%}
+    <div class="section-header text-center">
+      <h2>{{ section.settings.title }}</h2>
+      {% if section.settings.text != blank %}
+        <div class="rte text-{{ section.settings.align_text }}">
+          {{ section.settings.text }}
+        </div>
+      {% endif %}
+    </div>
+  {%- endif -%}
+
+  <div class="grid grid--uniform grid--flush-bottom icons-carousel icons-carousel-{{ section.id }}">
+    {%- liquid
+      assign grid_item_width = 'medium-up--one-quarter'
+      case section.blocks.size
+        when 1
+          assign grid_item_width = 'medium-up--one-half'
+        when 2
+          assign grid_item_width = 'medium-up--one-half'
+        when 3
+          assign grid_item_width = 'medium-up--one-third'
+        when 4
+          assign grid_item_width = 'medium-up--one-quarter'
+      endcase
+    -%}
+  
+    {%- for block in section.blocks -%}
+      <div class="grid__item {{ grid_item_width }} text-center" {{ block.shopify_attributes }} data-aos="row-of-3">
+        {%- if block.settings.enable_image -%}
+          <div style="margin: 0 auto; max-width: {{ block.settings.image_width }}px; height: {{ block.settings.image_width }}px">
+            {%- if block.settings.button_link != blank -%}
+              <a href="{{ block.settings.button_link }}">
+            {%- endif -%}
+            {%- if block.settings.image != blank -%}
+              <div class="image-wrap text-spacing" style="height: 0; padding-bottom: {{ 100 | divided_by: block.settings.image.aspect_ratio }}%;">
+                {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                <img class="lazyload"
+                    data-src="{{ img_url }}"
+                    data-widths="[180, 360, 540, 720, 900, 1080]"
+                    data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ block.settings.image.alt }}">
+              </div>
+            {%- else -%}
+              <div class="image-wrap text-spacing">{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+            {%- endif -%}
+            {%- if block.settings.button_link != blank -%}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if block.settings.title != blank -%}
+          <h3>{{ block.settings.title }}</h3>
+        {%- endif -%}
+        {%- if block.settings.text != blank -%}
+          <div class="rte-setting text-spacing">{{ block.settings.text }}</div>
+        {%- endif -%}
+        {%- if block.settings.button_label != blank -%}
+          <a href="{{ block.settings.button_link }}" class="btn btn--secondary btn--small">
+            {{ block.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+  
+  {% if section.settings.link_text != blank or section.settings.bottom_text != blank %}
+  <div class="section-footer text-center">
+    {% if section.settings.bottom_text != blank %}
+        <div class="rte text-{{ section.settings.align_text }}">
+          {{ section.settings.bottom_text }}
+        </div>
+      {% endif %}
+    <a href="{{ section.settings.link }}" class="btn btn--secondary">
+      {{ section.settings.link_text }}
+    </a>
+  </div>
+  {% endif %}
+  
+</div>
+
+{%- if section.settings.divider -%}</div>{%- endif -%}
+</div>
+  
+<style>
+  #iwt-columns--{{ section.id }} {
+    background: {{ section.settings.background }};
+    {% if section.settings.padding %}
+     padding: 100px 0;
+    {% endif %}
+  }
+  #iwt-columns--{{ section.id }},
+  #iwt-columns--{{ section.id }} h3,
+  #iwt-columns--{{ section.id }} h2{
+    color: {{ section.settings.text_color }};
+  }
+  #iwt-columns--{{ section.id }} .btn {
+    color: {{ section.settings.text_color }};
+    border-color: {{ section.settings.text_color }};
+  }
+  {% if section.settings.padding %}
+     @media screen and ( max-width: 768px ) {
+       #iwt-columns--{{ section.id }} {
+          padding: 50px 0;
+         }
+      }
+   {% endif %}
+  {% if section.settings.wrap %}
+  #iwt-columns--{{ section.id }} h2{
+        margin-bottom: 30px;
+      }
+   @media screen and ( min-width: 769px ) {
+     #iwt-columns--{{ section.id }} .page-width {
+        max-width: 1100px;
+       }
+     #iwt-columns--{{ section.id }} .section-header {
+        margin-bottom: 100px;
+       }
+      #iwt-columns--{{ section.id }} .grid {
+        flex-wrap: wrap;
+       }
+       #iwt-columns--{{ section.id }} .grid__item {
+         margin-bottom: 100px;
+       }
+      }
+     @media screen and ( max-width: 768px ) {
+       #iwt-columns--{{ section.id }} .section-header {
+          margin-bottom: 50px;
+         }
+      }
+  {% endif %}
+
+  {% if section.settings.carousel %}
+  .icons-carousel-{{ section.id }}:after {
+      content: 'flickity';
+      display: none; /* hide :after */
+    }
+    
+    @media screen and ( min-width: 769px ) {
+      /* disable Flickity for large devices */
+      .icons-carousel-{{ section.id }}:after {
+        content: '';
+      }
+    }
+    {% else %}
+     @media screen and (max-width: 768px) {}
+      .icons-carousel-{{ section.id }} .grid__item {
+          margin-bottom: 20px;
+      }
+     }
+    {% endif %}
+</style>
+
+{% if section.settings.carousel %}
+<script>
+  var flkty = new Flickity( '.icons-carousel-{{ section.id }}', {
+  adaptiveHeight: true,
+  avoidReflow: true,
+  cellAlign: 'center',
+  pageDots: true,
+  prevNextButtons: false,
+  watchCSS: true,
+  wrapAround: true
+});
+</script>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Featured icons",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading"
+      },
+      {
+        "id": "text",
+        "type": "richtext",
+        "label": "Text"
+      },
+      {
+        "id": "bottom_text",
+        "type": "richtext",
+        "label": "Text below icons"
+      },
+      {
+        "type": "url",
+        "id": "link",
+        "label": "Button link"
+      },
+      {
+        "type": "text",
+        "id": "link_text",
+        "label": "Button text"
+      },
+      {
+        "type": "select",
+        "id": "align_text",
+        "label": "Alignment",
+        "default": "center",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Centered"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "padding",
+        "label": "Add extra padding",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "wrap",
+        "label": "Wrap icons on desktop",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "carousel",
+        "label": "Enable carousel on mobile",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "background",
+        "label": "Background",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Column",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "enable_image",
+            "label": "Show image",
+            "default": true
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "range",
+            "id": "image_width",
+            "label": "Image width",
+            "default": 60,
+            "min": 40,
+            "max": 200,
+            "step": 10,
+            "unit": "px"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Example title"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text"
+          },
+          {
+            "type": "text",
+            "id": "button_label",
+            "label": "Button label"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured icons",
+        "blocks": [
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

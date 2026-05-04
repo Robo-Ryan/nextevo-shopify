@@ -1,0 +1,81 @@
+{%- liquid
+  unless grid_item_width
+    assign grid_item_width = 'small--one-half medium-up--one-third'
+  endunless
+
+  unless background_position
+    assign background_position = 'center center'
+  endunless
+
+  if block.settings.title != blank
+    assign title_output = block.settings.title
+  else
+    if collection.empty?
+      assign title_output = 'home_page.onboarding.collection_title' | t
+    elsif collection_title
+      assign title_output = collection_title
+    else
+      assign title_output = collection.title | escape
+    endif
+  endif
+-%}
+
+<div class="grid__item {{ grid_item_width }}" id="item-{{ block.id }}">
+  <a href="{{ collection.url }}" class="collection-item collection-item--{{ settings.collection_grid_style }}" data-aos="row-of-{{ per_row }}">
+
+    {%- liquid
+      if block.settings.image != blank
+       assign collection_image = block.settings.image
+      elsif settings.collection_grid_image == 'collection' and collection.image
+        assign collection_image = collection.image
+      else
+        assign collection_image = collection.products.first.featured_media.preview_image
+      endif
+    -%}
+
+    {%- if collection.empty? -%}
+      {%- capture placeholder -%}collection-{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+      <div class="collection-image collection-image--{{ settings.collection_grid_shape }} collection-image--placeholder">{{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}</div>
+    {%- else -%}
+      <div class="collection-image collection-image--{{ settings.collection_grid_shape }} image-wrap">
+        {%- assign img_url = collection_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        <img
+          class="lazyload"
+          src=""
+          data-src="{{ img_url }}"
+          data-aspectratio="{{ collection_image.aspect_ratio }}"
+          data-widths="[360, 540, 720, 900, 1080]"
+          data-sizes="auto"
+          alt="{{ collection_image.alt | escape }}"
+          style="object-position: {{ background_position }};">
+
+        <noscript>
+          <img class="lazyloaded"
+            src="{{ collection_image | img_url: '400x' }}"
+            alt="{{ collection_image.alt | escape }}">
+        </noscript>
+      </div>
+    {%- endif -%}
+
+    <span
+      class="collection-item__title collection-item__title--{{ settings.collection_grid_style }} collection-item__title--{{ settings.type_collection_font }} collection-item__title--{{ settings.collection_grid_text_align }}">
+      <div class="text-btn">
+            {{ title_output }}
+        <svg width="34" height="13" viewBox="0 0 34 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25.592 12.2C26.584 10.152 27.512 8.61602 28.376 7.59202H0.391968V5.57602H28.376C27.512 4.55202 26.584 3.01602 25.592 0.968018H27.272C29.288 3.30402 31.4 5.03202 33.608 6.15202V7.01602C31.4 8.10402 29.288 9.83202 27.272 12.2H25.592Z" fill="#002d72"></path>
+        </svg>
+      </div>
+    </span>
+
+  </a>
+  <style>
+       #item-{{ block.id }},
+       #item-{{ block.id }} .text-btn {
+         color: {{block.settings.color }};
+       }
+       #item-{{ block.id }} svg,
+       #item-{{ block.id }} svg path {
+         fill: {{block.settings.color }};
+       }
+  </style>
+</div>

@@ -1,0 +1,26 @@
+<div class="affiliate-section {% if section.settings.padding %}section-padding{% endif %}">
+  <div class="page-width">
+    <div class="affiliate-content">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Affiliate Content",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "padding",
+      "label": "Add section padding",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Affiliate Content"
+    }
+  ]
+}
+{% endschema %}

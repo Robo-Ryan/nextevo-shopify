@@ -1,0 +1,278 @@
+<div id="section--{{ section.id }}" class="image-icon-overlay">
+  <div class="image-icon-overlay--content" id="{{ section.settings.id }}">
+    {%- if section.settings.title != blank or section.settings.text != blank -%}
+      {% if section.settings.title != blank %}
+       <h2>{{ section.settings.title | escape }}</h2>
+      {% endif %}
+      {% if section.settings.text != blank %}
+      <div class="rte">
+        {{ section.settings.text }}
+      </div>
+      {% endif %}
+     {%- endif -%}
+      <div class="image-icon-overlay--icons custom-columns">
+        {% for block in section.blocks %}
+          <div id="item-{{ block.id }}" class="column icon-item">
+            {% if block.settings.image != blank %}
+             <img src="{{ block.settings.image | img_url: 'master' }}">
+            {% endif %}
+            {%- if block.settings.title != blank -%}
+              <h3>{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {% if block.settings.text != blank %}
+             <div class="icon-caption">
+               {{ block.settings.text }}
+             </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% if section.settings.disclaimer %}
+    <div class="disclaimer">
+      {{ section.settings.disclaimer }}
+    </div>
+  {% endif %}
+  </div>
+  
+  
+  
+  {% if section.settings.mobile_fit == 'contain' and section.settings.mobile_background != blank %}
+       <img class="mobile-image" src="{{ section.settings.mobile_background | img_url: 'master' }}">
+      {% endif %}
+</div>
+
+<style>
+  #section--{{ section.id }} {
+    position: relative;
+    background-color: {{ section.settings.background_color }};
+    background-image: url({{ section.settings.background | img_url: 'master' }});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: {{ section.settings.height }}px;
+    color: {{ section.settings.color }};
+    text-align: center;
+  }
+  #section--{{ section.id }} h2,
+  #section--{{ section.id }} h3{
+    color: {{ section.settings.color }};
+  }
+  #section--{{ section.id }} .disclaimer {
+    color: {{ section.settings.disclaimer_color }};
+  }
+  #section--{{ section.id }} .image-icon-overlay--content {
+    position: absolute;
+    top: {{ section.settings.vertical_position }}%;
+    left: {{ section.settings.horizontal_position }}%;
+    transform: translate(-{{ section.settings.horizontal_position }}%, -{{ section.settings.vertical_position }}%);
+    width: {{ section.settings.content_size }}px;
+    padding: 60px;
+  }
+  .image-icon-overlay--icons {
+    margin-top: 40px;
+  }
+  #section--{{ section.id }} .icon-item img {
+    height: {{ section.settings.icon_size }}px;
+    margin-bottom: 10px;
+  }
+  .mobile-image {
+      display: none;
+    }
+  .image-icon-overlay .disclaimer {
+    text-align: left;
+    font-size: 0.6em;
+    max-width: 500px;
+    margin-top: 20px;
+  }
+  .image-icon-overlay .disclaimer p{
+    margin-bottom: 0;
+  }
+  @media screen and (max-width: 768px) {
+    #section--{{ section.id }} {
+      {% if section.settings.mobile_background != blank and section.settings.mobile_fit == 'contain' %}
+       background-image: none;
+      {% elsif section.settings.mobile_background != blank %}
+       background-image: url({{ section.settings.mobile_background | img_url: 'master' }});
+      {% endif %}
+      height: auto;
+    }
+    #section--{{ section.id }}  .image-icon-overlay--content {
+      position: relative;
+      padding: 40px 20px;
+      width: 100%;
+      top: unset;
+      left: unset;
+      transform: unset;
+    }
+    {% if section.settings.mobile_background != blank and section.settings.mobile_fit == 'contain' %}
+    #section--{{ section.id }} .image-icon-overlay--content {
+      padding-bottom: 0;
+    }
+    {% endif %}
+    .mobile-image {
+      display: block;
+      width: 100%;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Image with icon overlay",
+    "settings": [
+     {
+        "type": "text",
+        "id": "id",
+        "label": "Custom ID"
+     },
+     {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color",
+        "default": "#fff"
+     },
+     {
+        "type": "image_picker",
+        "id": "background",
+        "label": "Background image"
+     },
+     {
+        "type": "image_picker",
+        "id": "mobile_background",
+        "label": "Mobile background"
+     },
+     {
+      "type": "select",
+      "id": "mobile_fit",
+      "label": "Mobile background fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "contain"
+    },
+     {
+        "type": "range",
+        "id": "height",
+        "label": "Desktop height",
+        "default": 600,
+        "min": 300,
+        "max": 1200,
+        "step": 10,
+        "unit": "px"
+      },
+     {
+        "type": "range",
+        "id": "content_size",
+        "label": "Content width",
+        "default": 600,
+        "min": 300,
+        "max": 1200,
+        "step": 10,
+        "unit": "px"
+      },
+     {
+        "type": "range",
+        "id": "vertical_position",
+        "label": "Vertical position",
+        "default": 50,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%"
+      },
+      {
+        "type": "range",
+        "id": "horizontal_position",
+        "label": "Horizontal position",
+        "default": 50,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%"
+      },
+     {
+        "type": "range",
+        "id": "icon_size",
+        "label": "Icon Size",
+        "default": 80,
+        "min": 20,
+        "max": 200,
+        "step": 5,
+        "unit": "px"
+     },
+     {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Rich text"
+      },
+      {
+        "id": "text",
+        "type": "richtext",
+        "label": "Text",
+        "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Text color",
+        "default": "#fff"
+      },
+      {
+        "id": "disclaimer",
+        "type": "richtext",
+        "label": "Disclaimer"
+      },
+      {
+        "type": "color",
+        "id": "disclaimer_color",
+        "label": "Disclaimer color",
+        "default": "#000"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "icon",
+        "name": "Icon",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text",
+            "default": "Add some text"
+          }
+         ]
+       }
+     ],
+     "presets": [
+      {
+        "name": "Image with icon overlay",
+        "blocks": [
+          {
+            "type": "icon"
+          },
+          {
+            "type": "icon"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
